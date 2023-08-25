@@ -66,10 +66,10 @@ defmodule Guessbot.Bot do
   end
 
   def handle({:callback_query, %{data: "play now"}} = data, cnt) do
-
     text = """
     Guess a number between 1 and 100.
     """
+
     answer(cnt, text)
   end
 
