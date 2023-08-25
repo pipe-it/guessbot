@@ -3,15 +3,44 @@ defmodule Guessbot.Bot do
 
   command("start")
   command("play")
+  command("about")
+  command("help")
 
   def handle({:command, :start, %{from: _user}} = data, cnt) do
     text = """
     Welcome to Number Guessing Game!
 
     To Play Number Game send "/play"
+    To Know about the Game or Developer send "/about"
+    For help send "/help"
 
-    Cheers..! XD
+    |> Cheers..! XD
 
+    """
+
+    answer(cnt, text)
+  end
+
+  def handle({:command, :about, %{from: _user}} = data, cnt) do
+    text = """
+    Number guessing game is a humble elixir based telegram bot. 
+
+    Developer Email: pipe-it@gmx.it
+    Developer GitHub Repo : https://github.com/pipe-it/guessbot
+    """
+
+    answer(cnt, text)
+  end
+
+  def handle({:command, :help, %{from: _user}} = data, cnt) do
+    text = """
+    You start the game by guessing a random number between 1 and 100.
+
+    Once you start, you get prompt to let you know if your guess is small or big relative to the random number.
+
+    You may respond with the closest number, and the cycle continues untill you guess the right number.
+
+    |> Cheers..! XD
     """
 
     answer(cnt, text)
@@ -37,16 +66,10 @@ defmodule Guessbot.Bot do
   end
 
   def handle({:callback_query, %{data: "play now"}} = data, cnt) do
-    
-    start_game = Guess.Game.start_game()
-    
-    text = """
-    You have to guess a number between 1 and 100
-    and i will tell you if it is smaller or bigger
-    than the correct number untill your guess
-    matchs with the number:
-    """
 
+    text = """
+    Guess a number between 1 and 100.
+    """
     answer(cnt, text)
   end
 
