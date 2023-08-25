@@ -1,0 +1,9 @@
+{application,guessbot,
+             [{applications,[kernel,stdlib,elixir,logger,ex_gram,tesla,
+                             hackney,jason]},
+              {description,"guessbot"},
+              {modules,['Elixir.Guessbot','Elixir.Guessbot.Application',
+                        'Elixir.Guessbot.Bot','Elixir.Http']},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.Guessbot.Application',[]}}]}.
