@@ -65,10 +65,41 @@ defmodule Guessbot.Bot do
     ExGram.send_message(data.chat.id, text, options)
   end
 
-  def handle({:callback_query, %{data: "play now"}} = data, cnt) do
+  def handle({:callback_query, %{data: "play now", from: user} = data}, cnt) do
+    # IO.inspect(data)
+    n = 100
+
+    rn =
+      1..n |> Enum.random() |> IO.inspect(label: "############################################")
+
+    user = Map.put(user, :rn, rn)
+    Guessbot.Gameserver.register_user(user)
+
     text = """
     Guess a number between 1 and 100.
     """
+
+    reply_markup = %{
+      inline_keyboard: Guessbot.button_generator(n)
+      # resize_keyboard: true
+    }
+
+    options = [reply_markup: reply_markup, parse_mode: "markdown"]
+    ExGram.send_message(data.message.chat.id, text, options)
+  end
+
+  def handle({:callback_query, %{data: "guess " <> x} = data}, cnt) do
+    Guessbot.Gameserver.inc_trail(data.from)
+
+    text =
+      case Guessbot.Gameserver.check_number(data.from, x) do
+        {true, game} ->
+          "You Guessed #{x} correctly in #{game.trails} trails"
+          
+
+        {false, game} ->
+          "guess again"
+      end
 
     answer(cnt, text)
   end

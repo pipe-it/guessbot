@@ -453,7 +453,7 @@
           "$RELEASE_LIB/guessbot-0.1.0/ebin"]},
      {primLoad,
          ['Elixir.Guessbot','Elixir.Guessbot.Application',
-          'Elixir.Guessbot.Bot','Elixir.Http']},
+          'Elixir.Guessbot.Bot','Elixir.Guessbot.Gameserver','Elixir.Http']},
      {path,
          ["$RELEASE_LIB/../releases/0.1.0/consolidated",
           "$RELEASE_LIB/iex-1.14.5/ebin"]},

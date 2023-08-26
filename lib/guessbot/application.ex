@@ -13,6 +13,7 @@ defmodule Guessbot.Application do
     children = [
       {Http, port: 8080},
       ExGram,
+      Guessbot.Gameserver,
       {Guessbot.Bot, [method: :polling, token: token]}
 
       # Starts a worker by calling: Drinkly.Worker.start_link(arg)

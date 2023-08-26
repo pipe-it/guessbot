@@ -1,18 +1,8 @@
 defmodule Guessbot do
-  @moduledoc """
-  Documentation for `Guessbot`.
-  """
+  # helper functions
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Guessbot.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def button_generator(n) do
+    Enum.map(1..n, fn x -> %{text: "#{x}", callback_data: "guess #{x}"} end)
+    |> Enum.chunk_every(8)
   end
 end
