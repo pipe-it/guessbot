@@ -93,7 +93,7 @@ defmodule Guessbot.Bot do
 
     case Guessbot.Gameserver.check_number(data.from, x) do
       {true, game} ->
-        text = "You Guessed #{x} correctly in #{game.trails} trails"
+        text = "You Guessed #{x} correctly in #{game.trails} Tries"
         answer(cnt, text)
 
       {false, game} ->
