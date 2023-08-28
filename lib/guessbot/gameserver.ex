@@ -17,6 +17,10 @@ defmodule Guessbot.Gameserver do
     GenServer.call(__MODULE__, {:hint, user, user_guess})
   end
 
+  def save_previous_message(user, message) do
+    GenServer.cast(__MODULE__, {:save_previous_message, user, message})
+  end
+
   def register_user(user) do
     GenServer.cast(__MODULE__, {:register, user})
   end
@@ -36,6 +40,13 @@ defmodule Guessbot.Gameserver do
 
     hint = Guessbot.get_hint(user_guess |> String.to_integer(), game.rn)
     {:reply, hint, state}
+  end
+
+  def handle_cast({:save_previous_message, user, message}, state) do
+    game = Map.get(state, user.id) |> Map.put(:previous_message, message)
+
+    state = Map.put(state, user.id, game)
+    {:noreply, state}
   end
 
   def handle_cast({:register, user}, state) do

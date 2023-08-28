@@ -89,6 +89,7 @@ defmodule Guessbot.Bot do
   end
 
   def handle({:callback_query, %{data: "guess " <> x} = data}, cnt) do
+    # ExGram.answer_callback_query(data.id)
     Guessbot.Gameserver.inc_trail(data.from)
 
     case Guessbot.Gameserver.check_number(data.from, x) do
@@ -99,7 +100,13 @@ defmodule Guessbot.Bot do
       {false, game} ->
         hint = Guessbot.Gameserver.hint_number(data.from, x)
         text = "Guess again, #{x} is #{hint}"
-        answer(cnt, text)
+        # answer(cnt, text) |> IO.inspect()
+        if pm = Map.get(game, :previous_message) do
+          Guessbot.delete_message(pm)
+        end
+
+        {:ok, message} = ExGram.send_message(data.message.chat.id, text, [])
+        Guessbot.Gameserver.save_previous_message(data.from, message)
     end
   end
 

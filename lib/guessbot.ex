@@ -15,4 +15,8 @@ defmodule Guessbot do
         "Low"
     end
   end
+
+  def delete_message(message) do
+    ExGram.delete_message(message.chat.id, message.message_id)
+  end
 end
