@@ -13,6 +13,10 @@ defmodule Guessbot.Gameserver do
     GenServer.call(__MODULE__, {:check, user, user_guess})
   end
 
+  def hint_number(user, user_guess) do
+    GenServer.call(__MODULE__, {:hint, user, user_guess})
+  end
+
   def register_user(user) do
     GenServer.cast(__MODULE__, {:register, user})
   end
@@ -25,6 +29,13 @@ defmodule Guessbot.Gameserver do
     game = Map.get(state, user.id)
 
     {:reply, {user_guess == "#{game.rn}", Map.get(state, user.id)}, state}
+  end
+
+  def handle_call({:hint, user, user_guess}, _from, state) do
+    game = Map.get(state, user.id)
+
+    hint = Guessbot.get_hint(user_guess |> String.to_integer(), game.rn)
+    {:reply, hint, state}
   end
 
   def handle_cast({:register, user}, state) do

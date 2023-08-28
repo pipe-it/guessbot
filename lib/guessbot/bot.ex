@@ -91,17 +91,16 @@ defmodule Guessbot.Bot do
   def handle({:callback_query, %{data: "guess " <> x} = data}, cnt) do
     Guessbot.Gameserver.inc_trail(data.from)
 
-    text =
-      case Guessbot.Gameserver.check_number(data.from, x) do
-        {true, game} ->
-          "You Guessed #{x} correctly in #{game.trails} trails"
-          
+    case Guessbot.Gameserver.check_number(data.from, x) do
+      {true, game} ->
+        text = "You Guessed #{x} correctly in #{game.trails} trails"
+        answer(cnt, text)
 
-        {false, game} ->
-          "guess again"
-      end
-
-    answer(cnt, text)
+      {false, game} ->
+        hint = Guessbot.Gameserver.hint_number(data.from, x)
+        text = "Guess again, #{x} is #{hint}"
+        answer(cnt, text)
+    end
   end
 
   def handle({:callback_query, %{data: "exit"}} = data, cnt) do
