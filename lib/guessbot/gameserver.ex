@@ -22,7 +22,11 @@ defmodule Guessbot.Gameserver do
   end
 
   def register_user(user) do
-    GenServer.cast(__MODULE__, {:register, user})
+    GenServer.call(__MODULE__, {:register_user, user})
+  end
+
+  def register_game(game, user) do
+    GenServer.call(__MODULE__, {:register_game, game, user})
   end
 
   def inc_trail(user) do
@@ -49,8 +53,24 @@ defmodule Guessbot.Gameserver do
     {:noreply, state}
   end
 
-  def handle_cast({:register, user}, state) do
-    {:noreply, Map.put(state, user.id, user)}
+  def handle_call({:register_user, %Guessbot.User{} = user}, _from, state) do
+    {:reply, {:ok, user}, Map.put(state, user.id, user)}
+  end
+
+  def handle_call({:register_user, _}, _from, state) do
+    {:reply, {:error, user}, state}
+  end
+
+  def handle_call(
+        {:register_game, %Guessbot.Game{} = game, %Guessbot.User{} = user},
+        _from,
+        state
+      ) do
+    {:reply, {:ok, game}, Map.put(state, user.id, user)}
+  end
+
+  def handle_call({:register_game, _}, _from, state) do
+    {:reply, {:error, game}, state}
   end
 
   def handle_cast({:inctrail, user}, state) do

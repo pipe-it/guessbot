@@ -66,26 +66,33 @@ defmodule Guessbot.Bot do
   end
 
   def handle({:callback_query, %{data: "play now", from: user} = data}, cnt) do
-    # IO.inspect(data)
+    IO.inspect(data)
     n = 100
 
-    rn =
-      1..n |> Enum.random() |> IO.inspect(label: "############################################")
+    rn = 1..n |> Enum.random()
+    game_id = UUID.uuid1()
+    game = %Guessbot.Game{gameid: game_id, gamern: rn}
+    user = %Guessbot.User{userid: user.id, username: user.username}
 
-    user = Map.put(user, :rn, rn)
-    Guessbot.Gameserver.register_user(user)
+    case Guessbot.Gameserver.register_user(user) do
+      {:ok, user} ->
+        Guessbot.Gameserver.register_game(game, user)
 
-    text = """
-    Guess a number between 1 and 100.
-    """
+        text = """
+        Guess a number between 1 and 100.
+        """
 
-    reply_markup = %{
-      inline_keyboard: Guessbot.button_generator(n)
-      # resize_keyboard: true
-    }
+        reply_markup = %{
+          inline_keyboard: Guessbot.button_generator(n)
+          # resize_keyboard: true
+        }
 
-    options = [reply_markup: reply_markup, parse_mode: "markdown"]
-    ExGram.send_message(data.message.chat.id, text, options)
+        options = [reply_markup: reply_markup, parse_mode: "markdown"]
+        ExGram.send_message(data.message.chat.id, text, options)
+
+      {:error, user} ->
+        answer(cnt, "no user")
+    end
   end
 
   def handle({:callback_query, %{data: "guess " <> x} = data}, cnt) do

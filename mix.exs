@@ -27,7 +27,8 @@ defmodule Guessbot.MixProject do
       {:ex_gram, "~> 0.8.0"},
       {:tesla, "~> 1.2"},
       {:hackney, "~> 1.12"},
-      {:jason, ">= 1.0.0"}
+      {:jason, ">= 1.0.0"},
+      {:elixir_uuid, "~> 1.2"}
     ]
   end
 
