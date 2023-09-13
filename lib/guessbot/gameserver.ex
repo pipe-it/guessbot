@@ -57,7 +57,7 @@ defmodule Guessbot.Gameserver do
     {:reply, {:ok, user}, Map.put(state, user.id, user)}
   end
 
-  def handle_call({:register_user, _}, _from, state) do
+  def handle_call({:register_user, user}, _from, state) do
     {:reply, {:error, user}, state}
   end
 
@@ -69,7 +69,7 @@ defmodule Guessbot.Gameserver do
     {:reply, {:ok, game}, Map.put(state, user.id, user)}
   end
 
-  def handle_call({:register_game, _}, _from, state) do
+  def handle_call({:register_game, game}, _from, state) do
     {:reply, {:error, game}, state}
   end
 

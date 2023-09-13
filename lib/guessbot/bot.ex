@@ -2,8 +2,8 @@ defmodule Guessbot.Bot do
   use ExGram.Bot, name: :numgues_bot
 
   command("start")
-  command("play")
   command("about")
+  command("play")
   command("help")
 
   def handle({:command, :start, %{from: _user}} = data, cnt) do
@@ -68,7 +68,6 @@ defmodule Guessbot.Bot do
   def handle({:callback_query, %{data: "play now", from: user} = data}, cnt) do
     IO.inspect(data)
     n = 100
-
     rn = 1..n |> Enum.random()
     game_id = UUID.uuid1()
     game = %Guessbot.Game{gameid: game_id, gamern: rn}
