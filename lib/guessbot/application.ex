@@ -15,13 +15,8 @@ defmodule Guessbot.Application do
       ExGram,
       Guessbot.Gameserver,
       {Guessbot.Bot, [method: :polling, token: token]}
-
-      # Starts a worker by calling: Drinkly.Worker.start_link(arg)
-      # {Drinkly.Worker, arg}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Guessbot.Supervisor]
 
     case Supervisor.start_link(children, opts) do
